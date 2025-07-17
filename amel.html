@@ -1,0 +1,441 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>100 Reasons Why I Love You</title>
+  <style>
+    /* 🌸 Romantic Theme */
+    @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Montserrat:wght@300;500&display=swap');
+    
+    :root {
+      --pink: #ffebf3;
+      --rose: #ff66a3;
+      --gold: #ffcc00;
+    }
+    
+    body {
+      font-family: 'Montserrat', sans-serif;
+      background: var(--pink);
+      color: #5a2a3e;
+      margin: 0;
+      overflow-x: hidden;
+    }
+    
+    /* ✨ Floating Petals */
+    .petals {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: -1;
+    }
+    
+    .petal {
+      position: absolute;
+      font-size: 24px;
+      opacity: 0.7;
+      animation: float 18s linear infinite;
+    }
+    
+    @keyframes float {
+      0% { transform: translateY(100vh) rotate(0deg); }
+      100% { transform: translateY(-20vh) rotate(360deg); }
+    }
+    
+    /* 💌 Header */
+    header {
+      padding: 3rem 1rem;
+      text-align: center;
+      background: linear-gradient(45deg, #ffebf3, #ffd6e7);
+    }
+    
+    h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 4rem;
+      margin: 0;
+      color: var(--rose);
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    }
+    
+    h2 {
+      font-weight: 300;
+      font-size: 1.5rem;
+    }
+    
+    /* ✉️ Folded Note Design */
+    .reasons-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 25px;
+      padding: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    
+    .note {
+      background: white;
+      border-radius: 0 15px 15px 15px;
+      padding: 0;
+      box-shadow: 0 3px 10px rgba(255, 102, 163, 0.2);
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.5s ease;
+      height: 60px; /* Folded state */
+    }
+    
+    /* Ribbon fold effect */
+    .note::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 0;
+      border-width: 0 25px 25px 0;
+      border-style: solid;
+      border-color: transparent #ffd6e7 transparent transparent;
+    }
+    
+    .note::after {
+      content: "❤";
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      color: var(--rose);
+      font-size: 14px;
+    }
+    
+    .note-content {
+      padding: 20px;
+      opacity: 0;
+      transform: translateY(10px);
+      transition: all 0.4s ease 0.2s;
+    }
+    
+    .note-number {
+      font-weight: bold;
+      color: var(--rose);
+      margin-bottom: 10px;
+    }
+    
+    /* Opened note state */
+    .note.open {
+      height: auto;
+      background: linear-gradient(135deg, white, #fff5f9);
+    }
+    
+    .note.open .note-content {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    
+    .note.open::before {
+      border-color: transparent #ff85b2 transparent transparent;
+    }
+    
+    /* 🎀 Surprise Popup */
+    .popup-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    
+    .popup-overlay.active {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .popup {
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      max-width: 500px;
+      text-align: center;
+      position: relative;
+      transform: scale(0.8);
+      transition: transform 0.3s;
+      box-shadow: 0 10px 30px rgba(255, 102, 163, 0.3);
+    }
+    
+    .popup-overlay.active .popup {
+      transform: scale(1);
+    }
+    
+    .popup h3 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 2.5rem;
+      color: var(--rose);
+      margin-top: 0;
+    }
+    
+    .popup-close {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 1.5rem;
+      cursor: pointer;
+      color: #aaa;
+    }
+    
+    /* 📱 Responsive */
+    @media (max-width: 768px) {
+      h1 { font-size: 2.5rem; }
+      .reasons-container { grid-template-columns: 1fr; }
+      .popup { width: 90%; }
+    }
+  </style>
+</head>
+<body>
+  <!-- 🌸 Floating Petals -->
+  <div class="petals" id="petals"></div>
+  
+  <!-- 💖 Header -->
+  <header>
+    <h1>100 Reasons Why I Love You</h1>
+    <h2>For my sweetie girl <span id="theirName">Amel</span></h2>
+    <p>Click on each folded note to discover my love ❤</p>
+  </header>
+  
+  <!-- ✉️ Folded Notes Grid -->
+  <div class="reasons-container" id="reasonsContainer">
+    <!-- Notes will be added by JavaScript -->
+  </div>
+  
+  <!-- 🎁 Surprise Button -->
+  <div style="text-align: center; padding: 3rem 0;">
+    <button id="surpriseBtn" style="
+      background: linear-gradient(45deg, var(--rose), #ff3385);
+      color: white;
+      border: none;
+      padding: 1rem 2rem;
+      font-size: 1.2rem;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 5px 20px rgba(255, 102, 163, 0.4);
+      transition: transform 0.3s;
+    ">
+      I Have a Special Surprise For You...
+    </button>
+  </div>
+  
+  <!-- 💘 Romantic Popup -->
+  <div class="popup-overlay" id="popupOverlay">
+    <div class="popup">
+      <button class="popup-close" id="popupClose">×</button>
+      <h3>My Greatest Reason</h3>
+      <p style="font-size: 1.1rem; line-height: 1.6;">
+        The most important reason I love you...<br><br>
+        <span style="font-weight: bold; color: var(--rose); font-size: 1.3rem;">
+          Because in a world of infinite possibilities,<br>
+          my heart found its home in you.
+        </span>
+      </p>
+      <div id="popupHearts" style="margin-top: 20px; font-size: 24px;"></div>
+    </div>
+  </div>
+  
+  <script>
+    // 🌸 Create floating petals
+    function createPetals() {
+      const petalsContainer = document.getElementById('petals');
+      const petalChars = ['❀', '✿', '❁', '🌸', '💮', '🏵️'];
+      for (let i = 0; i < 25; i++) {
+        const petal = document.createElement('div');
+        petal.className = 'petal';
+        petal.innerHTML = petalChars[Math.floor(Math.random() * petalChars.length)];
+        petal.style.left = `${Math.random() * 100}vw`;
+        petal.style.animationDuration = `${Math.random() * 15 + 10}s`;
+        petal.style.animationDelay = `${Math.random() * 5}s`;
+        petalsContainer.appendChild(petal);
+      }
+    }
+    
+    // 💌 Reasons data (customize these!)
+    const reasons = [
+  "Your eyes hold a calm I’ve never known before",
+  "Your smile feels like a warm morning after a cold night",
+  "You make love feel like stillness, not noise",
+  "You taught me that love doesn’t always need words",
+  "You have a soul that speaks in silence",
+  "Your eyes tell stories that only hearts understand",
+  "You remind me that peace can wear a smile",
+  "You make love feel light, not heavy",
+  "You carry gentleness in a world that often forgets it",
+  "Your presence is a dua answered in quiet",
+  "Your smile makes faith feel like it’s blooming inside me",
+  "You show me what it means to love with kindness",
+  "Your eyes have known me longer than time",
+  "You’re not loud, but your love echoes deep",
+  "You give comfort just by being near",
+  "You made me understand love can be light and strong",
+  "Your smile is a reminder that this world still holds beauty",
+  "You are the calm in my every storm",
+  "Your love doesn’t rush — it stays",
+  "You carry the kind of softness that heals",
+  "You make the idea of forever feel peaceful",
+  "Your eyes don’t look — they understand",
+  "You are the kind of soul love chooses to stay with",
+  "You make silence feel like a warm hug",
+  "You are the pause my heart didn’t know it needed",
+  "Your smile has stayed in my heart even when you’re far",
+  "You remind me of everything pure and unspoken",
+  "You make faith and love walk together",
+  "You are proof that Allah writes love, not the world",
+  "You hold beauty that time can’t take away",
+  "You love without needing to be loud about it",
+  "You make me feel chosen without asking",
+  "Your eyes hold a thousand meanings with one look",
+  "You are made of patience, and love grew there",
+  "You taught me that love feels like calm, not chaos",
+  "Your presence feels like a quiet prayer answered",
+  "You give me reasons to believe in softness again",
+  "You are the kind of person that makes time feel sacred",
+  "You made love feel respectful, real, and right",
+  "Your smile carries healing, not just happiness",
+  "You are the kind of love that doesn’t leave a bruise",
+  "You are the breath between my fears and peace",
+  "You remind me that love is not meant to hurt",
+  "Your eyes know how to hold without touching",
+  "You are made of what love prays for",
+  "Your voice feels like still water on a noisy day",
+  "You are home in a world that always moves",
+  "You hold beauty in more than just your face",
+  "Your eyes feel like places I’ve already been in dreams",
+  "You carry sincerity like a fragrance",
+  "You are the reason patience became easier",
+  "You remind me that love doesn’t always need proof — just presence",
+  "You are where my heart feels safe to land",
+  "You are the answer to the prayers I whispered with tears",
+  "Your love feels like safety wrapped in sunshine",
+  "You are a peaceful pause in a rushing world",
+  "You are written in ways only the soul understands",
+  "Your smile brings barakah into the moment",
+  "You love like someone who knows the value of a heart",
+  "Your eyes reflect something deeper than beauty",
+  "You don’t need to try — love comes naturally from you",
+  "You remind me that love should be prayerful, not painful",
+  "You make every day feel soft, even when it’s hard",
+  "You have the kind of presence love wants to stay near",
+  "You are what it means to love without possession",
+  "Your eyes hold a sky no one else can see",
+  "You turned patience into something beautiful",
+  "Your smile lights places in me that were once dark",
+  "You taught me that love is not in taking, but in staying",
+  "You make hard moments feel easier just by existing",
+  "You are the softness I never knew I needed",
+  "You are love before it’s spoken, after it’s gone quiet",
+  "Your eyes carry an entire world I’d never tire of exploring",
+  "Your soul feels like something I’ve always known",
+  "You make love feel like returning home, not leaving it",
+  "You are the one who made love feel sacred again",
+  "Your presence teaches my heart to breathe slower",
+  "Your love is quiet, but it teaches loudly",
+  "Your smile holds more kindness than many words",
+  "You make love feel intentional and clean",
+  "You are the person love feels safest inside",
+  "You make me feel like hearts were made to recognize souls",
+  "You love without needing to take space — you create it",
+  "Your silence is never empty — it holds warmth",
+  "You are what I imagine peace sounds like",
+  "Your eyes teach lessons about trust without speaking",
+  "You make distance feel small and time feel kind",
+  "You are the kind of love that asks nothing but gives everything",
+  "Your love is planted deep — it doesn’t fade with wind",
+  "You are what love would look like if it wore sincerity",
+  "Your smile is a place I want to visit again and again",
+  "You are the love story I never thought I’d deserve",
+  "You carry love in the way you walk, talk, and listen",
+  "You made love feel like something I could believe in again",
+  "Your eyes are the verses I never stop rereading",
+  "You are the prayer that came true without thunder or signs",
+  "You made me understand love as a form of peace",
+  "You are the most beautiful part of every day I have",
+  "You made love feel so halal, it felt like light",
+  "You taught me that love lives in simplicity",
+  "You made my heart feel like it belongs somewhere good",
+  "You are the soul that made mine stop wandering",
+  "I love you"
+];
+
+    
+    // 📝 Create folded notes
+    function createNotes() {
+      const container = document.getElementById('reasonsContainer');
+      reasons.forEach((reason, index) => {
+        const note = document.createElement('div');
+        note.className = 'note';
+        note.innerHTML = `
+          <div class="note-content">
+            <div class="note-number">Reason #${index + 1}</div>
+            <div class="reason-text">${reason}</div>
+          </div>
+        `;
+        
+        note.addEventListener('click', () => {
+          note.classList.toggle('open');
+        });
+        
+        container.appendChild(note);
+      });
+    }
+    
+    // 🎀 Popup functions
+    function showPopup() {
+      const overlay = document.getElementById('popupOverlay');
+      overlay.classList.add('active');
+      
+      // Add floating hearts in popup
+      const heartsContainer = document.getElementById('popupHearts');
+      let hearts = '';
+      for (let i = 0; i < 12; i++) {
+        hearts += '<span style="opacity: 0; animation: float-heart 3s ease-out ' + (i * 0.2) + 's forwards; display: inline-block; margin: 0 5px;">❤</span>';
+      }
+      heartsContainer.innerHTML = hearts;
+    }
+    
+    function closePopup() {
+      document.getElementById('popupOverlay').classList.remove('active');
+    }
+    
+    // 🌟 Initialize everything
+    window.onload = function() {
+      createPetals();
+      createNotes();
+      
+      // Set up surprise button
+      document.getElementById('surpriseBtn').addEventListener('click', showPopup);
+      document.getElementById('popupClose').addEventListener('click', closePopup);
+      
+      // Personalize name from URL
+      const urlParams = new URLSearchParams(window.location.search);
+      const name = urlParams.get('name');
+      if (name) {
+        document.getElementById('theirName').textContent = name;
+      }
+    };
+  </script>
+  
+  <style>
+    /* Animation for popup hearts */
+    @keyframes float-heart {
+      0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+      20% { opacity: 1; }
+      100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</body>
+</html>
